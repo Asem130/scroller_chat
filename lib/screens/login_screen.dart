@@ -19,8 +19,6 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/scholar.png',
-                    width: 20,
-                    height: 300,
                   ),
                   const Text(
                     'Scroller Chat',
@@ -41,7 +39,7 @@ class LoginScreen extends StatelessWidget {
               height: 10,
             ),
             const CustomTextField(
-              hintText: 'Emaill',
+              hintText: 'Email',
               icon: Icon(
                 Icons.email,
                 color: Color.fromARGB(255, 161, 161, 161),

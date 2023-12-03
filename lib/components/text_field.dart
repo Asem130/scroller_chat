@@ -8,6 +8,7 @@ class CustomTextField extends StatelessWidget {
   });
   final String hintText;
   final Icon icon;
+  
 
   @override
   Widget build(BuildContext context) {
