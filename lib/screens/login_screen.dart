@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
               style: TextStyle(
                   fontFamily: 'Pacifico', fontSize: 24, color: Colors.white),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             const CustomTextField(
