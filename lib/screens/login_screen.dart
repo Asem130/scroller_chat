@@ -19,8 +19,8 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/images/scholar.png',
-                    width: 100,
-                    height: 100,
+                    width: 150,
+                    height: 150,
                   ),
                   const Text(
                     'Scroller Chat',
