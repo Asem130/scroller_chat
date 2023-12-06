@@ -4,7 +4,6 @@ import 'package:scroller_chat/firebase_options.dart';
 import 'package:scroller_chat/screens/chat_screen.dart';
 import 'package:scroller_chat/screens/login_screen.dart';
 import 'package:scroller_chat/screens/regester_screen.dart';
-import 'package:scroller_chat/widgets/buble.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
