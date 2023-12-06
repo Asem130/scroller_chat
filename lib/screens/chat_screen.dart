@@ -28,9 +28,34 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) => const ChatBuble(),
-        physics: const BouncingScrollPhysics(),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemBuilder: (context, index) => const ChatBuble(),
+              physics: const BouncingScrollPhysics(),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              
+              decoration: InputDecoration(
+                hintText: 'send a message',
+                suffixIcon: const Icon(
+                  Icons.send,
+                  color: kPrimaryColor,
+                ),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: kPrimaryColor)),
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: kPrimaryColor)),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
