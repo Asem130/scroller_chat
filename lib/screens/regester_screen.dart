@@ -1,106 +1,171 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scroller_chat/components/text.dart';
 import 'package:scroller_chat/components/text_field.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({
+    super.key,
+  });
   static String id = 'RegisterScreen';
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
+  GlobalKey<FormState> formKey = GlobalKey();
+
+  String? email;
+
+  String? passward;
+
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 46, 66, 85),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            const Spacer(
-              flex: 1,
-            ),
-            Image.asset(
-              'assets/images/scholar.png',
-            ),
-            const Text(
-              'Scroller Chat',
-              style: TextStyle(
-                  fontFamily: 'Pacifico', fontSize: 24, color: Colors.white),
-            ),
-            const Spacer(
-              flex: 2,
-            ),
-            const Row(
+    return ModalProgressHUD(
+      inAsyncCall: isLoading,
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 46, 66, 85),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey,
+            child: Column(
               children: [
-                CustomText(
-                  text: 'Sign up',
-                  size: 24,
-                  color: Colors.white,
+                const Spacer(
+                  flex: 1,
                 ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const CustomTextField(
-              hintText: 'Email',
-              icon: Icon(
-                Icons.email,
-                color: Color.fromARGB(255, 161, 161, 161),
-              ),
-            ),
-            const SizedBox(height: 15),
-            CustomTextField(
-              hintText: 'passward',
-              icon: IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.visibility_off,
-                  color: Color.fromARGB(255, 161, 161, 161),
+                Image.asset(
+                  'assets/images/scholar.png',
                 ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            GestureDetector(
-              child: Container(
-                width: double.infinity,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
+                const Text(
+                  'Scroller Chat',
+                  style: TextStyle(
+                      fontFamily: 'Pacifico',
+                      fontSize: 24,
+                      color: Colors.white),
                 ),
-                child: const Center(
-                    child: CustomText(
-                        text: 'Sign in',
-                        size: 20,
-                        color: Color.fromARGB(255, 50, 56, 55))),
-              ),
-            ),
-            const SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CustomText(
-                  text: 'already have an account?',
-                  size: 15,
-                  color: Colors.white,
+                const Spacer(
+                  flex: 2,
                 ),
-                const SizedBox(width: 5),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
+                const Row(
+                  children: [
+                    CustomText(
+                      text: 'Register',
+                      size: 24,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                CustomTextField(
+                  onChanged: (data) {
+                    email = data;
                   },
-                  child: const CustomText(
-                    text: 'Sign in',
-                    size: 15,
-                    color: Color(0xffC7EDE6),
+                  hintText: 'Email',
+                  icon: const Icon(
+                    Icons.email,
+                    color: Color.fromARGB(255, 161, 161, 161),
                   ),
                 ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  onChanged: (data) {
+                    passward = data;
+                  },
+                  hintText: 'passward',
+                  icon: IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Icons.visibility_off,
+                      color: Color.fromARGB(255, 161, 161, 161),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                GestureDetector(
+                  onTap: () async {
+                    if (formKey.currentState!.validate()) {
+                      isLoading = true;
+                      setState(() {});
+                      try {
+                        await userRegister();
+                        Navigator.pop(context);
+                        showSnackBar(context, 'Succsess!');
+                      } on FirebaseAuthException catch (ex) {
+                        if (ex.code == 'weak-password') {
+                          showSnackBar(context, 'weak password');
+                        } else if (ex.code == 'email-already-in-use') {
+                          showSnackBar(context, 'email already exist!');
+                        }
+                      }
+                      isLoading = false;
+                      setState(() {});
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: const Center(
+                        child: CustomText(
+                            text: 'Sign up',
+                            size: 20,
+                            color: Color.fromARGB(255, 50, 56, 55))),
+                  ),
+                ),
+                const SizedBox(height: 15),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CustomText(
+                      text: 'already have an account?',
+                      size: 15,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(width: 5),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: const CustomText(
+                        text: 'Sign in',
+                        size: 15,
+                        color: Color(0xffC7EDE6),
+                      ),
+                    ),
+                  ],
+                ),
+                const Spacer(
+                  flex: 4,
+                ),
               ],
             ),
-            const Spacer(
-              flex: 4,
-            ),
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+      ),
+    );
+  }
+
+   Future<void> userRegister() async {
+    var auth = FirebaseAuth.instance;
+    UserCredential user = await auth.createUserWithEmailAndPassword(
+        email: email!, password: passward!);
   }
 }
