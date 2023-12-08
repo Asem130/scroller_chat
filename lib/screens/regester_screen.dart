@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scroller_chat/components/text.dart';
 import 'package:scroller_chat/components/text_field.dart';
+import 'package:scroller_chat/constants.dart';
+import 'package:scroller_chat/helper/show_snackbar.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({
@@ -39,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   flex: 1,
                 ),
                 Image.asset(
-                  'assets/images/scholar.png',
+                  kLogo,
                 ),
                 const Text(
                   'Scroller Chat',
@@ -155,15 +157,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  void showSnackBar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-      ),
-    );
-  }
-
-   Future<void> userRegister() async {
+  Future<void> userRegister() async {
     var auth = FirebaseAuth.instance;
     UserCredential user = await auth.createUserWithEmailAndPassword(
         email: email!, password: passward!);

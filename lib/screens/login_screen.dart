@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scroller_chat/constants.dart';
 import 'package:scroller_chat/components/text.dart';
+import 'package:scroller_chat/helper/show_snackbar.dart';
 import 'package:scroller_chat/screens/chat_screen.dart';
 
 import '../components/text_field.dart';
@@ -40,7 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   flex: 1,
                 ),
                 Image.asset(
-                  'assets/images/scholar.png',
+                  kLogo,
                 ),
                 const Text(
                   'Scroller Chat',
@@ -96,11 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() {});
 
                       try {
-                        var auth = FirebaseAuth.instance;
-                        UserCredential userCredential =
-                            await auth.signInWithEmailAndPassword(
-                                email: email!, password: password!);
-                        showSnackBar(context, 'success');
+                        await userLogin();
+
                         Navigator.pushNamed(context, ChatScreen.id);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
@@ -162,11 +160,9 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void showSnackBar(BuildContext context, String text) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(text),
-      ),
-    );
+  Future<void> userLogin() async {
+    var auth = FirebaseAuth.instance;
+    UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: email!, password: password!);
   }
 }
