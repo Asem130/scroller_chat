@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scroller_chat/constants.dart';
 import 'package:scroller_chat/helper/show_snackbar.dart';
 import 'package:scroller_chat/model/message_model.dart';
@@ -16,14 +17,14 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  ScrollController controlleer =ScrollController();
   CollectionReference messages =
       FirebaseFirestore.instance.collection(kMessage);
+  final listController = ScrollController();
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-        stream: messages.orderBy(kCreatedAt).snapshots(),
+        stream: messages.orderBy(kCreatedAt,descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<MessageModel> messagesList = [];
@@ -50,7 +51,8 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      controller: controlleer,
+                      reverse: true,
+                      controller: listController,
                       itemBuilder: (context, index) {
                         return ChatBuble(message: messagesList[index]);
                       },
@@ -69,6 +71,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           },
                         );
                         controller.clear();
+                        listController.animateTo(
+                          0,
+                          duration: const Duration(microseconds: 500),
+                          curve: Curves.fastOutSlowIn,
+                        );
                       },
                       controller: controller,
                       decoration: InputDecoration(
@@ -90,7 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             );
           } else {
-            return const Text('loading');
+            return const Text('loadong');
           }
         });
   }
