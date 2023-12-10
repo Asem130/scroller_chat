@@ -5,6 +5,7 @@ import 'package:scroller_chat/constants.dart';
 import 'package:scroller_chat/components/text.dart';
 import 'package:scroller_chat/helper/show_snackbar.dart';
 import 'package:scroller_chat/screens/chat_screen.dart';
+import 'package:scroller_chat/screens/regester_screen.dart';
 
 import '../components/text_field.dart';
 
@@ -99,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       try {
                         await userLogin();
 
-                        Navigator.pushNamed(context, ChatScreen.id);
+                        Navigator.pushNamed(context, ChatScreen.id,arguments:  email);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'user-not-found') {
                           showSnackBar(context, 'invalid email');
@@ -139,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(width: 5),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, 'RegisterScreen');
+                        Navigator.pushNamed(context, RegisterScreen.id);
                       },
                       child: const CustomText(
                         text: 'REGISTER',

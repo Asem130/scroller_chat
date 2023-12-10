@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:scroller_chat/constants.dart';
 import 'package:scroller_chat/model/message_model.dart';
 
-class ChatBuble extends StatelessWidget {
-  const ChatBuble({
+class FChatBuble extends StatelessWidget {
+  const FChatBuble({
     super.key,
     required this.message,
   });
@@ -12,14 +12,14 @@ class ChatBuble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.centerRight,
       child: Container(
         margin: const EdgeInsets.all(8),
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
-          color: kPrimaryColor,
+          color: Color.fromARGB(255, 191, 145, 218),
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(30),
+            topLeft: Radius.circular(30),
             bottomLeft: Radius.circular(30),
             bottomRight: Radius.circular(30),
           ),

@@ -2,9 +2,10 @@ import 'package:scroller_chat/constants.dart';
 
 class MessageModel {
   final String message;
-  MessageModel(this.message);
+  final String id;
+  MessageModel(this.message, this.id);
 
   factory MessageModel.fromJson(json) {
-    return MessageModel(json[kMessage]);
+    return MessageModel(json[kMessage],json[kId]);
   }
 }

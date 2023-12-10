@@ -3,7 +3,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:scroller_chat/constants.dart';
 import 'package:scroller_chat/helper/show_snackbar.dart';
 import 'package:scroller_chat/model/message_model.dart';
-import 'package:scroller_chat/widgets/buble.dart';
+import 'package:scroller_chat/widgets/buble_for_friend.dart';
+import 'package:scroller_chat/widgets/buble_for_me.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -23,15 +24,15 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    var email = ModalRoute.of(context)!.settings.arguments;
     return StreamBuilder<QuerySnapshot>(
-        stream: messages.orderBy(kCreatedAt,descending: true).snapshots(),
+        stream: messages.orderBy(kCreatedAt, descending: true).snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<MessageModel> messagesList = [];
             for (int i = 0; i < snapshot.data!.docs.length; i++) {
               messagesList.add(MessageModel.fromJson(snapshot.data!.docs[i]));
             }
-
             return Scaffold(
               appBar: AppBar(
                 backgroundColor: kPrimaryColor,
@@ -54,7 +55,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       reverse: true,
                       controller: listController,
                       itemBuilder: (context, index) {
-                        return ChatBuble(message: messagesList[index]);
+                        return messagesList[index].id == email
+                            ? MChatBuble(message: messagesList[index])
+                            : FChatBuble(message: messagesList[index]);
                       },
                       itemCount: messagesList.length,
                       physics: const BouncingScrollPhysics(),
@@ -68,6 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           {
                             kMessage: data,
                             kCreatedAt: DateTime.now(),
+                            kId: email
                           },
                         );
                         controller.clear();
@@ -97,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             );
           } else {
-            return const Text('loadong');
+            return  Container();
           }
         });
   }
